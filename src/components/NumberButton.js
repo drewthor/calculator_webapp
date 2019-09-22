@@ -1,24 +1,22 @@
-import React, { Component } from 'react'; 
+import React, { useContext } from "react";
+import { EquationContext } from "../EquationProvider";
 
-class NumberButton extends Component {
-    constructor(props) {
-        super(props);
+const NumberButton = ({ value, span }) => {
+    const { currentNumber, setCurrentNumber } = useContext(EquationContext);
 
-        this.state = {value: props.value}
-        this.handleChange = this.handleChange.bind(this)
-    }
+    const addNumber = e => {
+        setCurrentNumber(currentNumber + value);
+    };
 
-    handleChange(event) {
-        this.setState({value: event.target.value})
-    }
-
-    render() {
-        return (
-            <form>
-                <input type="button" className="button numberButton" value={this.state.value} onChange={this.handleChange} readonly="readonly"/>
-            </form>
-        );
-    }
-}
+    return (
+        <input
+            type="button"
+            className={`button numberButton span-${span || 1}`}
+            value={value}
+            onClick={addNumber}
+            readOnly
+        />
+    );
+};
 
 export default NumberButton;

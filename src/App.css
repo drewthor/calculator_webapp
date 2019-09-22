@@ -1,3 +1,4 @@
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -20,6 +21,7 @@ a {
   grid-template-rows: [row];
   column-gap: 5%;
   height: 400px;
+  width: 400px;
   row-gap: 5%;
 }
 
@@ -27,12 +29,12 @@ a {
   height: 100%;
   width: 100%;
   background-color: darkgrey;
-  border-radius: 50%;
+  border-radius: 1000px;
   border: 2px solid black;
 }
 
-.calcGrid .span2 .button {
-  grid-column: 1 span 2;
+.calcGrid .button.span-2 {
+  grid-column: 1 / span 2;
 }
 
 .calcGrid .button.functionButton {
@@ -46,3 +48,4 @@ a {
 .calcGrid .button.specialButton {
   background-color: lightgrey;
 }
+

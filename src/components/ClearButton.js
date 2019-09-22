@@ -1,24 +1,18 @@
-import React, { Component } from 'react'; 
+import React, { useContext } from "react";
+import { EquationContext } from "../EquationProvider";
 
-class ClearButton extends Component {
-    constructor(props) {
-        super(props);
+const ClearButton = ({ span }) => {
+    const { handleClearAll } = useContext(EquationContext);
 
-        this.state = {value: "C"}
-        this.handleChange = this.handleChange.bind(this)
-    }
-
-    handleChange(event) {
-        this.setState({value: event.target.value})
-    }
-
-    render() {
-        return (
-            <form>
-                <input type="button" className="button specialButton" value={this.state.value} onChange={this.handleChange} readonly="readonly"/>
-            </form>
-        );
-    }
+    return(
+        <input
+            type="button"
+            className={`button specialButton span-${span || 1}`}
+            value={'C'}
+            onClick={handleClearAll}
+            readOnly
+        />
+    );
 }
 
 export default ClearButton;

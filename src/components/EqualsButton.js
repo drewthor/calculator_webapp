@@ -1,24 +1,18 @@
-import React, { Component } from 'react'; 
+import React, { useContext } from "react";
+import { EquationContext } from "../EquationProvider";
 
-class EqualsButton extends Component {
-    constructor(props) {
-        super(props);
+const EqualsButton = () => {
+    const { handlePerformCalculation } = useContext(EquationContext);
 
-        this.state = {value: "="}
-        this.handleChange = this.handleChange.bind(this)
-    }
-
-    handleChange(event) {
-        this.setState({value: event.target.value})
-    }
-
-    render() {
-        return (
-            <form>
-                <input type="button" className="button functionButton" value={this.state.value} onChange={this.handleChange} readonly="readonly"/>
-            </form>
-        );
-    }
+    return (
+        <input
+            type="button"
+            className="button functionButton"
+            value={'='}
+            onClick={handlePerformCalculation}
+            readOnly
+        />
+    );
 }
 
 export default EqualsButton;

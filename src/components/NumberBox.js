@@ -1,24 +1,18 @@
-import React, { Component } from 'react'; 
+import React, { useContext } from "react";
+import { EquationContext } from '../EquationProvider'
 
-class NumberBox extends Component {
-    constructor(props) {
-        super(props);
+const NumberBox = () => {
+    const { currentNumber }  = useContext(EquationContext);
 
-        this.state = {value: ''}
-        this.handleChange = this.handleChange.bind(this)
-    }
-
-    handleChange(event) {
-        this.setState({value: event.target.value})
-    }
-
-    render() {
-        return (
-            <form>
-                <input type="text" value={this.state.value} onChange={this.handleChange} readonly="readonly"/>
-            </form>
-        );
-    }
-}
+    return (
+        <form>
+            <input
+                type="text"
+                value={ currentNumber }
+                readOnly
+            />
+        </form>
+    );
+};
 
 export default NumberBox;
