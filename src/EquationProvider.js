@@ -14,9 +14,6 @@ const EquationProvider = (props) => {
     };
 
     const handleSetFunctionType = (type) => {
-        console.log("function type");
-        console.log(currentNumber);
-        console.log(value);
         if (currentNumber !== '' && value === '') {
             setValue(currentNumber);
             setFunctionType(type);
