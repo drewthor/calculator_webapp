@@ -13,6 +13,15 @@ const EquationProvider = (props) => {
         setValue('');
     };
 
+    const handleNegateNumber = () => {
+        if (currentNumber !== '') {
+            setCurrentNumber(Number.parseFloat(currentNumber) * -1);
+        }
+        else if (value !== '') {
+            setValue(Number.parseFloat(value) * -1);
+        }
+    }
+
     const handleSetFunctionType = (type) => {
         if (currentNumber !== '' && value === '') {
             setValue(currentNumber);
@@ -60,6 +69,7 @@ const EquationProvider = (props) => {
                 value,
                 setValue,
                 handleClearAll,
+                handleNegateNumber,
                 handleSetFunctionType,
                 handlePerformCalculation
             }}

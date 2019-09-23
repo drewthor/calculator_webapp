@@ -1,28 +1,18 @@
-import React, {Component} from "react";
+import React, { useContext } from "react";
+import { EquationContext } from "../EquationProvider";
 
-class NegateButton extends Component {
-    constructor(props) {
-        super(props);
+const NegateButton = () => {
+    const { handleNegateNumber } = useContext(EquationContext);
 
-        this.state = {value: "+/-"};
-        this.handleChange = this.handleChange.bind(this);
-    }
-
-    handleChange(event) {
-        this.setState({value: event.target.value});
-    }
-
-    render() {
-        return (
-            <input
-                type="button"
-                className="button specialButton"
-                value={this.state.value}
-                onChange={this.handleChange}
-                readOnly
-            />
-        );
-    }
+    return (
+        <input
+            type="button"
+            className="button specialButton"
+            value={'+/-'}
+            onClick={handleNegateNumber}
+            readOnly
+        />
+    );
 }
 
 export default NegateButton;
