@@ -13,8 +13,44 @@ const EquationProvider = (props) => {
         setValue('');
     };
 
+    const handleSetFunctionType = (type) => {
+        console.log("function type");
+        console.log(currentNumber);
+        console.log(value);
+        if (currentNumber !== '' && value === '') {
+            setValue(currentNumber);
+            setFunctionType(type);
+            setCurrentNumber('');
+        }
+        else if (currentNumber !== '' && value !== '') {
+            handlePerformCalculation();
+            setFunctionType(type);
+        }
+        else if (value !== '') {
+            setFunctionType(type);
+        }
+    }
+
     const handlePerformCalculation = () => {
-        setCurrentNumber('');
+        if (currentNumber !== '' && functionType !== '') {
+            switch(functionType) {
+                case '+':
+                    setValue(Number.parseFloat(value) + Number.parseFloat(currentNumber))
+                    break;
+                case '-':
+                    setValue(Number.parseFloat(value) - Number.parseFloat(currentNumber))
+                    break;
+                case '*':
+                    setValue(Number.parseFloat(value) * Number.parseFloat(currentNumber))
+                    break;
+                case '/':
+                    setValue(Number.parseFloat(value) / Number.parseFloat(currentNumber))
+                    break;
+                default:
+                    break;
+            }
+            setCurrentNumber('');
+        }
     };
 
     return (
@@ -27,6 +63,7 @@ const EquationProvider = (props) => {
                 value,
                 setValue,
                 handleClearAll,
+                handleSetFunctionType,
                 handlePerformCalculation
             }}
         >

@@ -2,19 +2,14 @@ import React, { useContext } from "react";
 import { EquationContext } from "../EquationProvider";
 
 const FunctionButton = ({value}) => {
-    const { setFunctionType, handlePerformCalculation } = useContext(EquationContext);
-
-    const handlePerformFunctionType = () => {
-        handlePerformCalculation();
-        setFunctionType(value);
-    };
+    const { handleSetFunctionType } = useContext(EquationContext);
 
     return (
         <input
             type="button"
             className="button functionButton"
             value={value}
-            onClick={handlePerformFunctionType}
+            onClick={() => handleSetFunctionType(value)}
             readOnly
         />
     );
