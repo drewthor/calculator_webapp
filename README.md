@@ -1,3 +1,5 @@
+Calculator Webapp built in ReactJS. Sends calculations to a Google Cloud Platform Cloud Function written in Golang found in the `server/` directory.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
