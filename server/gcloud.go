@@ -17,7 +17,7 @@ type calculation struct {
 func Receive(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodOptions:
-		w.Header().Set("Access-Control-Allow-Origin" /*"https://drewthor.github.io"*/, "*")
+		w.Header().Set("Access-Control-Allow-Origin", "https://drewthor.github.io")
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET")
 		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Origin, Referer, User-Agent")
 		w.Header().Set("Access-Control-Max-Age", "3600")
