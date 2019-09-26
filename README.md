@@ -1,5 +1,7 @@
 Calculator Webapp built in ReactJS. Sends calculations to a Google Cloud Platform Cloud Function written in Golang found in the `server/` directory.
 
+Live version hosted on Github Pages can be found at [https://www.drewthor.github.io/calculator_webapp/](https://www.drewthor.github.io/calculator_webapp/)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
