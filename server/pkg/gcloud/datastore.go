@@ -1,7 +1,9 @@
 package gcloud
 
 import (
+	"bytes"
 	"context"
+	"fmt"
 	"log"
 	"time"
 
@@ -35,11 +37,31 @@ type Calculation struct {
 	TimeAdded   time.Time
 }
 
-func (d *Datastore) GetLastTenCalculations() (*[]Calculation, bool) {
+type Calculations []*Calculation
+
+func (c *Calculations) MarshalJSON() ([]byte, error) {
+	buffer := bytes.NewBufferString("[")
+	length := len(*c)
+	count := 0
+	for _, value := range *c {
+		if value == nil {
+			continue
+		}
+		buffer.WriteString(fmt.Sprintf("{\"calculation\": \"%s\"}", value.Calculation))
+		count++
+		if count < length {
+			buffer.WriteString(",")
+		}
+	}
+	buffer.WriteString("]")
+	return buffer.Bytes(), nil
+}
+
+func (d *Datastore) GetLastTenCalculations() (Calculations, bool) {
 	if d.dsClient == nil {
 		d.initClient()
 	}
-	var calculations *[]Calculation
+	var calculations Calculations
 	query := datastore.NewQuery(projectKey).Order("-TimeAdded").Limit(10)
 	if _, err := d.dsClient.GetAll(d.ctx, query, &calculations); err != nil {
 		log.Println("failed to get last 10 Calculations")

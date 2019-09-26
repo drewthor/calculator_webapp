@@ -2,13 +2,13 @@ import React, { useContext } from "react";
 import { EquationContext } from '../EquationProvider'
 
 const NumberBox = () => {
-    const { currentNumber, value }  = useContext(EquationContext);
+    const { state }  = useContext(EquationContext);
 
     return (
         <form>
             <input
                 type="text"
-                value={ (currentNumber === '' ? (value === '' ? '0' : value) : currentNumber) }
+                value={ (state.currentNumber === '' ? (state.value === '' ? '0' : state.value) : state.currentNumber) }
                 readOnly
             />
         </form>

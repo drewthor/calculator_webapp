@@ -7,6 +7,7 @@ import NegateButton from './components/NegateButton';
 import ClearButton from './components/ClearButton';
 import EqualsButton from './components/EqualsButton';
 import EquationProvider from './EquationProvider';
+import LatestCalculations from './components/LatestCalculations';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <EqualsButton />
         </form>
       </EquationProvider>
+      <LatestCalculations />
     </div>
   );
 }

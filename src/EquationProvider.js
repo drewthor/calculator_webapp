@@ -1,73 +1,105 @@
-import React, { useEffect, useReducer, useState, createContext } from "react";
+import React, { useReducer, createContext } from "react";
 
 export const EquationContext = createContext();
 
-const initialCalculation = {value: ''}
+    const sendCalc = (calculation) => {
+        console.log(calculation);
+        console.log(JSON.stringify({
+                    calculation: calculation,
+                }));
+            fetch('https://us-central1-calculatorwebapp-253804.cloudfunctions.net/CalculationsAPI', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    calculation: calculation,
+                })
+            }).catch();
+    }
 
-const reducer = (state, action) => {
+const initialState = {
+    currentNumber: '',
+    functionType: '',
+    value: '',
+    calculation: '',
+}
+
+const stateReducer = (state, action) => {
     switch (action.type) {
         case 'clear':
-            return {value: ''};
-        case 'append':
-            return {value: state.value + action.value};
-        case 'removeLast':
-            return {value: state.value.slice(0, state.value.length - 1)}
+            return {...state, functionType: '', currentNumber: '', value: '', calculation: ''};
+
+        case 'negate':
+            if (state.currentNumber !== '') {
+                let number = Number.parseFloat(state.currentNumber) * -1;
+                let index = state.calculation.length - state.currentNumber.length;
+                return {...state, currentNumber: number, calculation: state.calculation.slice(0, index) + number};
+            }
+            else if (state.value !== '') {
+                // negate button was pressed after setting function type
+                let index = state.calculation.length - 1
+                return {...state, value: Number.parseFloat(state.value) * -1, calculation: state.calculation.slice(0, index) + "*-1" + state.functionType};
+            }
+            return state;
+
+        case 'addNumber':
+            return {...state, currentNumber: state.currentNumber + action.currentNumber, calculation: state.calculation + action.currentNumber, value: state.functionType === '' ? '' : state.value};
+
+        case 'clearCurrentNumber':
+            return {...state, currentNumber: ''};
+
+        case 'setFunctionType':
+            if (state.calculation.slice(-1) === state.functionType) {
+                return {...state, functionType: action.functionType, calculation: state.calculation.slice(0, state.calculation.length - 1) + action.functionType};
+            }
+            else if (state.currentNumber !== '' && state.value === '') {
+                return {...state, value: state.currentNumber, functionType: action.functionType, currentNumber: '', calculation: state.calculation + action.functionType};
+            }
+            else if (state.value !== '') {
+                return {...state, functionType: action.functionType, calculation: state.calculation + action.functionType};
+            }
+            return state;
+
+        case 'equals':
+            sendCalc(state.calculation + '=' + state.value);
+            return {...state, functionType: '', calculation: ''}
+
+        case 'setValue':
+            return {...state, value: action.value, currentNumber: ''};
+
+        case 'clearCalculation':
+            return {...state, calculation: ''};
+
         default:
             throw new Error();
     }
 }
 
 const EquationProvider = (props) => {
-    const [currentNumber, setCurrentNumber] = useState('');
-    const [functionType, setFunctionType] = useState('');
-    const [value, setValue] = useState('');
-    const [calculation, setCalculation] = useReducer(reducer, initialCalculation);
-    const [sendCalculation, setSendCalculation] = useState(false);
+    const [state, dispatch] = useReducer(stateReducer, initialState);
 
     const handleClearAll = () => {
-        setCurrentNumber('');
-        setFunctionType('');
-        setValue('');
-        setCalculation({type: 'clear'});
+        dispatch({type: 'clear'});
     };
 
     const handleNegateNumber = () => {
-        if (currentNumber !== '') {
-            setCurrentNumber(Number.parseFloat(currentNumber) * -1);
-        }
-        else if (value !== '') {
-            setValue(Number.parseFloat(value) * -1);
-        }
+        dispatch({type: 'negate'});
     };
 
     const handleAddNumber = number => {
-        if (functionType === '') {
-            setValue('');
-        }
-        setCurrentNumber(currentNumber + number);
-        setCalculation({type: 'append', value: number});
+        dispatch({type: 'addNumber', currentNumber: number});
     };
 
     const handleSetFunctionType = type => {
-        if (currentNumber !== '' && value === '') {
-            setValue(currentNumber);
-            setFunctionType(type);
-            setCurrentNumber('');
-            setCalculation({type: 'append', value: type});
+        if (state.currentNumber !== '' && state.value !== '') {
+            performCalculation();
         }
-        else if (currentNumber !== '' && value !== '') {
-            handlePerformCalculation();
-            setFunctionType(type);
-            setCalculation({type: 'append', value: type});
-        }
-        else if (value !== '') {
-            setFunctionType(type);
-            setCalculation({type: 'removeLast'})
-            setCalculation({type: 'append', value: type});
-        }
+        dispatch({type: 'setFunctionType', functionType: type});
     };
 
-    useEffect(() => {
+    /*useEffect(() => {
         console.log("boop");
         console.log(sendCalculation);
         console.log(calculation);
@@ -86,55 +118,47 @@ const EquationProvider = (props) => {
             setSendCalculation(false);
             setCalculation({type: 'clear'});
         }
-    }, [sendCalculation, calculation]);
+    }, [sendCalculation, calculation]);*/
 
     const handlePerformEquals = () => {
-        handlePerformCalculation();
-        setFunctionType('');
-        setCalculation({type: 'append', value: '=' + value});
-        setSendCalculation(true);
+        performCalculation();
+        dispatch({type: 'equals'});
     };
 
-    const handlePerformCalculation = () => {
-        if (currentNumber !== '' && functionType !== '') {
-            switch(functionType) {
+    const performCalculation = () => {
+        if (state.currentNumber !== '' && state.functionType !== '') {
+            switch(state.functionType) {
                 case '+':
-                    setValue(Math.round((Number.parseFloat(value) + Number.parseFloat(currentNumber)) * 1000) / 1000)
+                    dispatch({type: 'setValue', value: Math.round((Number.parseFloat(state.value) + Number.parseFloat(state.currentNumber)) * 1000) / 1000});
                     break;
                 case '-':
-                    setValue(Math.round((Number.parseFloat(value) - Number.parseFloat(currentNumber)) * 1000) / 1000)
+                    dispatch({type: 'setValue', value: Math.round((Number.parseFloat(state.value) - Number.parseFloat(state.currentNumber)) * 1000) / 1000});
                     break;
                 case '*':
-                    setValue(Math.round((Number.parseFloat(value) * Number.parseFloat(currentNumber)) * 1000) / 1000)
+                    dispatch({type: 'setValue', value: Math.round((Number.parseFloat(state.value) * Number.parseFloat(state.currentNumber)) * 1000) / 1000});
                     break;
                 case '/':
-                    setValue(Math.round((Number.parseFloat(value) / Number.parseFloat(currentNumber)) * 1000) / 1000)
+                    dispatch({type: 'setValue', value: Math.round((Number.parseFloat(state.value) / Number.parseFloat(state.currentNumber)) * 1000) / 1000});
                     break;
                 default:
                     break;
             }
         }
-        else if (currentNumber !== '' && functionType === '') {
-            setValue(currentNumber);
+        else if (state.currentNumber !== '' && state.functionType === '') {
+            dispatch({type: 'setValue', value: state.currentNumber});
         }
-        setCurrentNumber('');
+        //dispatch({type: 'clearCurrentNumber'});
     };
 
     return (
         <EquationContext.Provider
             value={{ 
-                currentNumber,
-                setCurrentNumber,
-                functionType,
-                setFunctionType,
-                value,
-                setValue,
+                state,
                 handleClearAll,
                 handleNegateNumber,
                 handleAddNumber,
                 handleSetFunctionType,
-                handlePerformEquals,
-                handlePerformCalculation
+                handlePerformEquals
             }}
         >
             {props.children}
