@@ -2,7 +2,7 @@
 * {
   box-sizing: border-box;
   margin: 0;
-  padding: 0;
+  padding: 2px;
 }
 
 body {
@@ -28,6 +28,7 @@ a {
 .calcGrid .button {
   height: 100%;
   width: 100%;
+  font-size: 25px;
   background-color: darkgrey;
   border-radius: 1000px;
   border: 2px solid black;
@@ -49,3 +50,6 @@ a {
   background-color: lightgrey;
 }
 
+.latestCalculations {
+  padding: 22px;
+}

@@ -2,22 +2,18 @@ import React, { useReducer, createContext } from "react";
 
 export const EquationContext = createContext();
 
-    const sendCalc = (calculation) => {
-        console.log(calculation);
-        console.log(JSON.stringify({
-                    calculation: calculation,
-                }));
-            fetch('https://us-central1-calculatorwebapp-253804.cloudfunctions.net/CalculationsAPI', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    calculation: calculation,
-                })
-            }).catch();
-    }
+const sendCalc = (calculation) => {
+    fetch('https://us-central1-calculatorwebapp-253804.cloudfunctions.net/CalculationsAPI', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            calculation: calculation,
+        })
+    }).catch();
+}
 
 const initialState = {
     currentNumber: '',
@@ -99,27 +95,6 @@ const EquationProvider = (props) => {
         dispatch({type: 'setFunctionType', functionType: type});
     };
 
-    /*useEffect(() => {
-        console.log("boop");
-        console.log(sendCalculation);
-        console.log(calculation);
-        if (sendCalculation && calculation !== '') {
-            console.log("sending");
-            fetch('https://us-central1-calculatorwebapp-253804.cloudfunctions.net/CalculationsAPI', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    calculation: calculation,
-                })
-            }).catch();
-            setSendCalculation(false);
-            setCalculation({type: 'clear'});
-        }
-    }, [sendCalculation, calculation]);*/
-
     const handlePerformEquals = () => {
         performCalculation();
         dispatch({type: 'equals'});
@@ -147,7 +122,6 @@ const EquationProvider = (props) => {
         else if (state.currentNumber !== '' && state.functionType === '') {
             dispatch({type: 'setValue', value: state.currentNumber});
         }
-        //dispatch({type: 'clearCurrentNumber'});
     };
 
     return (

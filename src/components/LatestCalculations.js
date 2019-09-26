@@ -20,7 +20,7 @@ const LatestCalculations = () => {
     }, []);
 
     return (
-        <div>
+        <div className="latestCalculations">
             <h3>Latest Calculations</h3>
             <ol>
                 {calculations.map((calculation, index) => ( <li key={index}>{calculation}</li>))}
