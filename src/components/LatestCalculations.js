@@ -15,7 +15,7 @@ const LatestCalculations = () => {
             .then(response => response.json())
             .then(response => response.map(item => item.Calculation));
             setCalculations(response);
-          }, 1000);
+          }, 500);
           return () => clearInterval(id);
     }, []);
 
