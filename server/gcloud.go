@@ -15,16 +15,17 @@ type calculation struct {
 }
 
 func Receive(w http.ResponseWriter, r *http.Request) {
+	const origin = "https://drewthor.github.io"
 	switch r.Method {
 	case http.MethodOptions:
-		w.Header().Set("Access-Control-Allow-Origin", "https://drewthor.github.io")
+		w.Header().Set("Access-Control-Allow-Origin", origin)
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET")
 		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Origin, Referer, User-Agent")
 		w.Header().Set("Access-Control-Max-Age", "3600")
 		w.WriteHeader(http.StatusOK)
 		return
 	case http.MethodGet:
-		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Origin", origin)
 		w.Header().Set("Content-Type", "application/json")
 
 		datastore := new(gcloud.Datastore)
@@ -52,7 +53,7 @@ func Receive(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "404 - Not Found", http.StatusNotFound)
 		}
 	case http.MethodPost:
-		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Origin", origin)
 		var c calculation
 		if err := json.NewDecoder(r.Body).Decode(&c); err != nil {
 			fmt.Fprint(w, "Hello, World!")
