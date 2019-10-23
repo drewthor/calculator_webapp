@@ -50,7 +50,7 @@ const stateReducer = (state, action) => {
     if (state.currentNumber === '' && state.value === '') {
       return state;
     }
-    else if (state.calculation.slice(-1) === state.functionType) {
+    else if (state.calculation > 0 && state.calculation.slice(-1) === state.functionType) {
       return {...state, functionType: action.functionType, calculation: state.calculation.slice(0, state.calculation.length - 1) + action.functionType};
     }
     else if (state.currentNumber !== '' && state.value === '') {
